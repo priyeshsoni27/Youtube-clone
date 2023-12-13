@@ -1,37 +1,92 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
+import { HAMBURGER_LOGO, YOUTUBE_SEARCH_API, YT_LOGO } from "../utils/constant";
+import { cacheItems } from "../utils/searchCache";
+import { json } from "react-router-dom";
 
 const Head = () => {
-    const dispatch=useDispatch();
-    const handleToggleClick=()=>{
-        dispatch(toggleMenu())
-    }
+  const dispatch = useDispatch();
+  const [searchText, setSearchText] = useState("");
+  const [suggestionText, setSuggestionText] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const handleToggleClick = () => {
+    dispatch(toggleMenu());
+  };
+
+  const searchCache = useSelector((store) => store.cacheItems);
+  console.log(searchCache);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchCache[searchText]) {
+        setSuggestionText(searchCache[searchText]);
+      } else {
+        getSearchResults();
+      }
+    }, 200);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchText]);
+
+  const getSearchResults = async () => {
+    fetch(YOUTUBE_SEARCH_API + searchText).then((dataValue) => {
+      dataValue.json().then((data) =>
+        setSuggestionText(
+          data[1],
+          dispatch(cacheItems({ [searchText]: json[1] }))
+        )
+      );
+    });
+  };
+
   return (
     <div className="grid grid-flow-col shadow-sm">
       <div className="flex m-1 ">
-        
         <img
           onClick={handleToggleClick}
           className="h-8 col-span-1 cursor-pointer"
           alt="hamburger-menu"
-          src={
-            "https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-5.png"
-          }
+          src={HAMBURGER_LOGO}
         />
         <a href="/">
-        <img
-          className="h-6 m-1"
-          alt="youtube-logo"
-          src={
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwGODoCWG12sFLdictA7wnOcoGgY0wjzZd9g&usqp=CAU"
-          }
-        />
-    </a>
+          <img className="h-6 m-1" alt="youtube-logo" src={YT_LOGO} />
+        </a>
       </div>
-      <div className="col-span-10">
-        <input type="text" className="w-1/2 border border-black rounded-l-full mt-2 p-1" placeholder="Search..." />
-        <button className="border border-black rounded-r-full p-1 ">🔍</button>
+      <div>
+        <div className="col-span-10">
+          <input
+            type="text"
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setShowSuggestions(false)}
+            value={searchText}
+            className=" w-[89%] border border-black rounded-l-full mt-2 p-1"
+            placeholder="Search..."
+          />
+          <button className="border border-black rounded-r-full p-1 ">
+            🔍
+          </button>
+        </div>
+        {showSuggestions && (
+          <div className="fixed bg-white py-2 px-2 w-[32rem] shadow-lg rounded-lg border border-gray-100">
+            <ul>
+              {suggestionText?.map((suggestionValues, index) => {
+                return (
+                  <li
+                    key={suggestionValues}
+                    className="py-2 px-3 shadow-sm hover:bg-gray-100 text-black"
+                  >
+                    🔍 {suggestionValues}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
       <div>
         <img
