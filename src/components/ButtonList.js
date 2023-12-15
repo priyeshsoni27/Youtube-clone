@@ -20,9 +20,9 @@ const ButtonList = () => {
   return (
     <div className=" flex gap-6 p-2">
       {Category.map((category_value, index) => (
-        <div className="border bg-slate-100 rounded-lg font-bold p-1 m-1">
+        <div key={index} className="border bg-slate-100 rounded-lg font-bold p-1 m-1">
           
-        <button key={index}>{category_value}</button></div>
+        <button >{category_value}</button></div>
       ))}
     </div>
   );
