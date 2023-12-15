@@ -14,8 +14,7 @@ const Head = () => {
     dispatch(toggleMenu());
   };
 
-  const searchCache = useSelector((store) => store.cacheItems);
-  console.log(searchCache);
+  const searchCache = useSelector((store) => store.search);
 
   useEffect(() => {
     const timer = setTimeout(() => {

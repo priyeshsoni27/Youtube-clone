@@ -1,18 +1,31 @@
-import React from 'react'
-import Button from './Button'
+import React from "react";
+import Button from "./Button";
 
 const ButtonList = () => {
-  return (
-    <div>
-      <Button name="All"></Button>
-      <Button name="Sports"></Button>
-      <Button name="Sitcoms"></Button>
-      <Button name="Horror"></Button>
-      <Button name="Comedy"></Button>
-      <Button name="Thriller"></Button>
-      <Button name="VLogs"></Button>
-    </div>
-  )
-}
+  const Category = [
+    "All",
+    "Live",
+    "React",
+    "Music",
+    "Sports",
+    "Netflix",
+    "Sitcoms",
+    "Movies",
+    "Latest Vlogs",
+    "Cricket",
+    "El-Clasico"
+    
+  ];
 
-export default ButtonList
+  return (
+    <div className=" flex gap-6 p-2">
+      {Category.map((category_value, index) => (
+        <div className="border bg-slate-100 rounded-lg font-bold p-1 m-1">
+          
+        <button key={index}>{category_value}</button></div>
+      ))}
+    </div>
+  );
+};
+
+export default ButtonList;

@@ -9,3 +9,5 @@ export const YOUTUBE_SEARCH_API ="http://suggestqueries.google.com/complete/sear
 export const YT_LOGO="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwGODoCWG12sFLdictA7wnOcoGgY0wjzZd9g&usqp=CAU"
 
 export const HAMBURGER_LOGO="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-5.png"
+
+export const LIVE_CHAT_CONST=10;
